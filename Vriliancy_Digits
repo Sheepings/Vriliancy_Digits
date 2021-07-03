@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace VriliancyDigits
+{
+    public class Vriliancy_Digits
+    {
+        public Queue<int> NumberQueue = new();
+        public Queue<int> CreateNumbers(Tuple<int, int> range)
+        {
+            Task<Queue<int>> result = Task.Run(() => FillQueue(range));
+            return result.Result;
+        }
+        protected Queue<int> FillQueue(Tuple<int, int> range)
+        {
+            Random random = new();
+            while (NumberQueue.Count != range.Item2)
+            {
+                using IEnumerator<int> number = Enumerable.Range(range.Item1, range.Item2).OrderBy(_ => random.Next()).GetEnumerator();
+                while (number.MoveNext())
+                {
+                    if (!NumberQueue.Contains(number.Current))
+                    {
+                        NumberQueue.Enqueue(number.Current);
+                    }
+                }
+            }
+            return NumberQueue;
+        }
+    }
+}
